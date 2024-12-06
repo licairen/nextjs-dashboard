@@ -5,7 +5,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
+// import { AuthError } from 'next-auth';
 
 // TODO:表单验证
 const FormSchema = z.object({
@@ -127,8 +127,6 @@ export async function authenticate(
         default:
           return 'Something went wrong.';
       }
-    } else if (error instanceof Error) {
-      return error.message; // Handle other errors
     }
     throw error;
   }
