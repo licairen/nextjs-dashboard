@@ -5,7 +5,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
-// import { AuthError } from 'next-auth';
+import { AuthError } from 'next-auth';
 
 // TODO:表单验证
 const FormSchema = z.object({
@@ -31,7 +31,6 @@ export type State = {
     amount?: string[];
     status?: string[];
   };
-  message?: string | null;
 };
  
 // TODO:创建
@@ -119,7 +118,7 @@ export async function authenticate(
 ) {
   try {
     await signIn('credentials', formData);
-  } catch (error) {
+  } catch (error: unknown) {  // Using unknown instead of any for type safety
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
@@ -133,14 +132,14 @@ export async function authenticate(
 }
 
 // TODO:退出登录
-export async function handleSignOut() {
-  try {
-    await signOut({
-      redirect: true,
-      callbackUrl: '/'
-    });
-  } catch (error) {
-    console.error('退出登录失败:', error);
-    throw error;
-  }
-}
+// export async function handleSignOut() {
+//   try {
+//     await signOut({
+//       redirect: true,
+//       callbackUrl: '/'
+//     });
+//   } catch (error) {
+//     console.error('退出登录失败:', error);
+//     throw error;
+//   }
+// }

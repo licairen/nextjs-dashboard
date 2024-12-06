@@ -12,7 +12,7 @@ import { createInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = { errors: {} };
   const [state, formAction] = useActionState(createInvoice, initialState);
   return (
     <form action={formAction}>
@@ -122,10 +122,9 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             </div>
             <div id="status-error" aria-live="polite" aria-atomic="true">
               {state.errors?.status &&
-                state.errors.status.map((error: string, message) => (
+                state.errors.status.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     <div>{error}</div>
-                    <div>{ state.message }</div>
                   </p>
                 ))}
             </div>
