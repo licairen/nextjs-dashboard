@@ -4,8 +4,10 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
-
+// TODO:表单验证
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
@@ -22,7 +24,7 @@ const FormSchema = z.object({
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
-
+// TODO:状态
 export type State = {
   errors?: {
     customerId?: string[];
@@ -32,7 +34,7 @@ export type State = {
   message?: string | null;
 };
  
-
+// TODO:创建
 export async function createInvoice(prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = CreateInvoice.safeParse({
@@ -73,7 +75,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-
+// TODO:更新
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 export async function updateInvoice(id: string, formData: FormData) {
     const { customerId, amount, status } = UpdateInvoice.parse({
@@ -98,7 +100,7 @@ export async function updateInvoice(id: string, formData: FormData) {
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
   }
-
+// TODO:删除
   export async function deleteInvoice(id: string) {
     try {
       await sql`DELETE FROM invoices WHERE id = ${id}`;
@@ -109,3 +111,38 @@ export async function updateInvoice(id: string, formData: FormData) {
       return { message: 'Database Error: Failed to Delete Invoice.' };
     }
   }
+
+// TODO:登录
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    } else if (error instanceof Error) {
+      return error.message; // Handle other errors
+    }
+    throw error;
+  }
+}
+
+// TODO:退出登录
+export async function handleSignOut() {
+  try {
+    await signOut({
+      redirect: true,
+      callbackUrl: '/'
+    });
+  } catch (error) {
+    console.error('退出登录失败:', error);
+    throw error;
+  }
+}
