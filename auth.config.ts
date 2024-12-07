@@ -1,35 +1,24 @@
-import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
+import type { AuthConfig } from '@auth/core';
 
-export default NextAuth({
-  providers: [
-    Providers.Credentials({
-      async authorize(credentials) {
-        // 添加你的认证逻辑，例如检查数据库中的用户
-        const user = { id: 1, name: "Test User", email: "test@example.com" };
-        if (user) {
-          return user;
-        }
-        return null;
-      },
-    }),
-  ],
+export const authConfig: AuthConfig = {
+  secret: process.env.NEXTAUTH_SECRET, // 确保从环境变量中读取 secret
+  pages: {
+    signIn: '/login', // 登录页面路径
+  },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      return true; // 如果需要，添加自定义登录逻辑
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl; // 登录后重定向
-    },
-    async session({ session, token }) {
-      session.user.id = token.id; // 将额外信息添加到会话中
-      return session;
-    },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id; // 将用户 ID 添加到 Token 中
       }
       return token;
     },
+    async session({ session, token }) {
+      if (token?.id && session.user) {
+        session.user.id = token.id as string; // 将用户 ID 添加到会话对象中
+      }
+      return session;
+    },
   },
-});
+  providers: [], // 在这里添加你的 Provider 配置
+  trustHost: true, // 允许跨域请求
+};

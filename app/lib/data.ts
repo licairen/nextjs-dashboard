@@ -50,36 +50,47 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
-    const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
-    const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
-    const invoiceStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
-         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
-         FROM invoices`;
+    // 首先检查表是否存在
+    const tableCheck = await sql`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'customers'
+      );
+    `;
+    
+    if (!tableCheck.rows[0].exists) {
+      return {
+        error: '数据库表未初始化，请先创建必要的数据表',
+        numberOfCustomers: 0,
+        numberOfInvoices: 0,
+        totalPaidInvoices: 0,
+        totalPendingInvoices: 0,
+      };
+    }
 
+    // 使用 Promise.all 同时执行多个查询
     const data = await Promise.all([
-      invoiceCountPromise,
-      customerCountPromise,
-      invoiceStatusPromise,
+      sql`SELECT COUNT(*) as count FROM customers`,
+      sql`SELECT COUNT(*) as count FROM invoices`,
+      sql`SELECT 
+          SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) as paid,
+          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) as pending
+        FROM invoices`
     ]);
 
-    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
-    const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
-    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
-
+    // 添加日志来调试
+    console.log('Query results:', data);
+    
     return {
-      numberOfCustomers,
-      numberOfInvoices,
-      totalPaidInvoices,
-      totalPendingInvoices,
+      numberOfCustomers: data[0].rows[0].count ?? 0,
+      numberOfInvoices: data[1].rows[0].count ?? 0,
+      totalPaidInvoices: data[2].rows[0].paid ?? 0,
+      totalPendingInvoices: data[2].rows[0].pending ?? 0,
     };
+
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
+    console.error('数据库查询错误:', error);
+    throw new Error('获取数据失败，请检查数据库连接和表结构');
   }
 }
 

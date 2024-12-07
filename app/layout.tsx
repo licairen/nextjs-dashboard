@@ -1,13 +1,17 @@
-import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
+import '@/app/ui/global.css'; 
+import { Inter } from 'next/font/google';
+
+// 初始化 Inter 字体
+const inter = Inter({ subsets: ['latin'] });
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+    <html lang="en" className={inter.className}>
+      <body>{children}</body>
     </html>
   );
 }

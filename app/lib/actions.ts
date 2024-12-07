@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 // import { AuthError } from 'next-auth/errors';
+import bcrypt from 'bcrypt';
 
 // TODO:表单验证
 const FormSchema = z.object({
@@ -117,12 +118,54 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    await signIn('credentials', formData);
+    // 尝试登录
+    await signIn('credentials', {
+      ...Object.fromEntries(formData),
+      redirect: true,
+      callbackUrl: '/dashboard'
+    });
+
+    return 'Success';
   } catch (error) {
     if (error instanceof Error) {
-      return 'Invalid credentials.';
+      return error.message;
     }
-    throw error;
+    return 'Something went wrong.';
+  }
+}
+
+// TODO:注册
+export async function register(prevState: string | undefined, formData: FormData) {
+  try {
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const name = (formData.get('name') || 'User')?.toString();  // 默认用户名
+
+    if (typeof email !== 'string') {
+      throw new Error('Email must be a string');
+    }
+
+    // 验证邮箱是否已存在
+    const existingUser = await sql`
+      SELECT * FROM users WHERE email = ${email}
+    `;
+
+    if (existingUser.rows.length > 0) {
+      return 'User already exists with this email';
+    }
+
+    // 加密密码
+    const hashedPassword = await bcrypt.hash(password as string, 10);
+
+    // 创建新用户
+    await sql`
+      INSERT INTO users (name, email, password)
+      VALUES (${name}, ${email}, ${hashedPassword})
+    `;
+
+    return undefined; // 注册成功
+  } catch (error) {
+    return `Database Error: Failed to register user----${JSON.stringify(error)}`;
   }
 }
 
