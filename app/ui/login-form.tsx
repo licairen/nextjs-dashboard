@@ -1,5 +1,5 @@
 'use client';
-
+ 
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
@@ -9,21 +9,19 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
 import { useActionState } from 'react';
-import { authenticate, register } from '@/app/lib/actions';
-import { useState } from 'react';
-
+import { authenticate } from '@/app/lib/actions';
+ 
 export default function LoginForm() {
-  const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, formAction, isPending] = useActionState(
-    isRegistering ? register : authenticate,
+    authenticate,
     undefined,
   );
-
+ 
   return (
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
-          {isRegistering ? 'Create an account' : 'Please log in to continue.'}
+          Please log in to continue.
         </h1>
         <div className="w-full">
           <div>
@@ -40,7 +38,8 @@ export default function LoginForm() {
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
-                defaultValue={isRegistering ? '' : "user@nextmail.com"}
+                defaultValue="user@nextmail.com"  // 添加默认邮箱
+                // user@nextmail.com
                 required
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -60,7 +59,7 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 placeholder="Enter password"
-                defaultValue={isRegistering ? '' : "123456"}
+                // defaultValue="123456"  // 添加默认密码
                 required
                 minLength={6}
               />
@@ -69,17 +68,8 @@ export default function LoginForm() {
           </div>
         </div>
         <Button className="mt-4 w-full" aria-disabled={isPending}>
-          {isRegistering ? 'Register' : 'Log in'} <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
-        <div className="mt-4 text-center">
-          <button
-            type="button"
-            onClick={() => setIsRegistering(!isRegistering)}
-            className="text-sm text-blue-500 hover:text-blue-600"
-          >
-            {isRegistering ? 'Already have an account? Log in' : 'Need an account? Register'}
-          </button>
-        </div>
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
