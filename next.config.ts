@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   // },
   images: {
     domains: ['images.unsplash.com'], // 允许从 Unsplash 加载图片
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fonts.gstatic.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
