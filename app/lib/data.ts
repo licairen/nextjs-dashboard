@@ -86,7 +86,7 @@ export async function fetchCardData() {
     ]);
 
     // 添加日志来调试
-    console.log('Query results:', data);
+    // console.log('Query results:', data);
     
     return {
       numberOfCustomers: data[0].rows[0].count ?? 0,

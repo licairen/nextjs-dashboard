@@ -1,3 +1,5 @@
+'use client';
+
 import {
   BanknotesIcon,
   ClockIcon,
@@ -13,26 +15,23 @@ const iconMap = {
   invoices: InboxIcon,
 };
 
-import { fetchCardData } from '@/app/lib/data';
-export default async function CardWrapper() {
-  const {
-    numberOfInvoices,
-    numberOfCustomers,
-    totalPaidInvoices,
-    totalPendingInvoices,
-  } = await fetchCardData();
+export function Cards({
+  numberOfInvoices,
+  numberOfCustomers,
+  totalPaidInvoices,
+  totalPendingInvoices,
+}: {
+  numberOfInvoices: number;
+  numberOfCustomers: number;
+  totalPaidInvoices: string;
+  totalPendingInvoices: string;
+}) {
   return (
     <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
-
       <Card title="Collected" value={totalPaidInvoices} type="collected" />
       <Card title="Pending" value={totalPendingInvoices} type="pending" />
       <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
-      <Card
-        title="Total Customers"
-        value={numberOfCustomers}
-        type="customers"
-      />
+      <Card title="Total Customers" value={numberOfCustomers} type="customers" />
     </>
   );
 }

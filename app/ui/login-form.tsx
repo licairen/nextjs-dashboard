@@ -1,5 +1,5 @@
 'use client';
- 
+
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
@@ -8,17 +8,44 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
-import { useActionState } from 'react';
-import { authenticate } from '@/app/lib/actions';
- 
-export default function LoginForm() {
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
-    undefined,
-  );
- 
+import { useState } from 'react';  // 新增 useState
+import { useRouter } from 'next/navigation';
+
+function LoginButton() {
   return (
-    <form action={formAction} className="space-y-3">
+    <Button className="mt-4 w-full">
+      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+    </Button>
+  );
+}
+
+export default function LoginForm() {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // 用于存储错误信息
+
+  async function handleSubmit(formData: FormData) {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: formData.get('email'),
+        password: formData.get('password'),
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(response, 'response7899988');
+
+    if (response.ok) {
+      // 登录成功，重定向到 dashboard
+      router.push('/dashboard');
+    } else {
+      // 登录失败，设置错误信息
+      // 你可以根据返回的响应结构来设置更详细的错误信息
+      setErrorMessage('Login failed. Please check your credentials.');
+    }
+  }
+
+  return (
+    <form action={handleSubmit} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
@@ -38,8 +65,7 @@ export default function LoginForm() {
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
-                defaultValue="user@nextmail.com"  // 添加默认邮箱
-                // user@nextmail.com
+                defaultValue="admin@qq.com"
                 required
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -59,7 +85,6 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 placeholder="Enter password"
-                // defaultValue="123456"  // 添加默认密码
                 required
                 minLength={6}
               />
@@ -67,9 +92,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <Button className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-        </Button>
+        <LoginButton />
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"

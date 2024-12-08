@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { signIn } from '@/auth';
 // import { AuthError } from 'next-auth/errors';
 import bcrypt from 'bcrypt';
 
@@ -32,47 +31,47 @@ export type State = {
     amount?: string[];
     status?: string[];
   };
+  message?: string;
+  status?: number;
 };
  
 // TODO:创建
+// 创建发票 Server Action
 export async function createInvoice(prevState: State, formData: FormData) {
-  // Validate form using Zod
   const validatedFields = CreateInvoice.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
- 
-  // If form validation fails, return errors early. Otherwise, continue.
+
   if (!validatedFields.success) {
     return {
+      status: 400,
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create Invoice.',
     };
   }
- 
-  // Prepare data for insertion into the database
+
   const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
-  const date = new Date().toISOString().split('T')[0];
- 
-  // Insert data into the database
+
   try {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      VALUES (${customerId}, ${amount}, ${status}, ${new Date().toISOString().split('T')[0]})
     `;
   } catch (error) {
-    // If a database error occurs, return a more specific error.
-    console.error('Database Error: Failed to Create Invoice.', error);
     return {
+      status: 500,
       message: 'Database Error: Failed to Create Invoice.',
     };
   }
- 
-  // Revalidate the cache for the invoices page and redirect the user.
+
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
+  return {
+    status: 200,
+    message: 'Invoice created successfully',
+  };
 }
 
 // TODO:更新
@@ -118,19 +117,39 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    // 尝试登录
-    await signIn('credentials', {
-      ...Object.fromEntries(formData),
-      redirect: true,
-      callbackUrl: '/dashboard'
+    console.log('开始登录流程...');
+    const email = formData.get('email');
+    const password = formData.get('password');
+    console.log('登录信息:', { email, password: '***' });
+
+    // 在服务器端组件中需要使用完整的 URL
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
     });
 
-    return 'Success';
-  } catch (error) {
-    if (error instanceof Error) {
-      return error.message;
+    console.log('登录响应状态:', response.status);
+    const data = await response.json();
+    console.log('登录响应数据:', data);
+
+    if (!response.ok) {
+      console.log('登录失败:', data.error);
+      return data.error || 'Authentication failed';
     }
-    return 'Something went wrong.';
+
+    if (data.code === 200) {
+      console.log('登录成功，准备重定向...');
+      // 返回 undefined 表示成功，让表单组件处理重定向
+      return undefined;
+    }
+
+    return 'Authentication failed with unknown error';
+  } catch (error) {
+    console.error('登录过程发生错误:', error);
+    return 'An error occurred during authentication';
   }
 }
 
