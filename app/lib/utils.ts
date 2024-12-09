@@ -1,7 +1,6 @@
 import { Revenue } from './definitions';
 
 export const formatCurrency = (amount: number) => {
-  console.log('amount', amount);
   
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
@@ -74,3 +73,9 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export function generateCimcValue(userId: string) {
+  const timestamp = Date.now();
+  const randomStr = Math.random().toString(36).substring(7);
+  return `${userId}_${timestamp}_${randomStr}`;
+}
