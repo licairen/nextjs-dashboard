@@ -34,3 +34,7 @@ coverage/
 # Misc
 .cache/
 .temp/
+
+# Next.js
+/prompts/
+.cursorrules
