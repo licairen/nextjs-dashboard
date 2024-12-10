@@ -4,11 +4,11 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
   BeakerIcon,
-  CommandLineIcon,
-  ArrowPathIcon,
-  CloudArrowDownIcon,
-  KeyIcon,
-  CpuChipIcon,
+  // CommandLineIcon,
+  // ArrowPathIcon,
+  // CloudArrowDownIcon,
+  // KeyIcon,
+  // CpuChipIcon,
   ChevronDownIcon, // 新增箭头图标
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -16,22 +16,41 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { useState } from 'react'; // 新增 state 管理展开状态
 
-// ... links 配置保持不变 ...
-const links = [
+// 首先定义子菜单项的类型
+type SubLink = {
+  name: string;
+  href: string;
+  icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
+    title?: string | undefined;
+    titleId?: string | undefined;
+  } & React.RefAttributes<SVGSVGElement>>;
+};
+
+// 定义主菜单项的类型
+type NavLink = {
+  name: string;
+  href: string;
+  icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
+    title?: string | undefined;
+    titleId?: string | undefined;
+  } & React.RefAttributes<SVGSVGElement>>;
+  children?: SubLink[];  // 添加可选的 children 属性
+};
+
+const links: NavLink[] = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   { name: 'Invoices', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
-  // 新增实验室相关链接
   { 
     name: 'Labs', 
-    href: '/labs', 
+    href: '/dashboard/labs',
     icon: BeakerIcon,
     // children: [
-    //   { name: '基础特性', href: '/labs/basic', icon: CommandLineIcon },
-    //   { name: '路由系统', href: '/labs/routing', icon: ArrowPathIcon },
-    //   { name: '数据获取', href: '/labs/data-fetch', icon: CloudArrowDownIcon },
-    //   { name: '认证系统', href: '/labs/auth', icon: KeyIcon },
-    //   { name: '性能优化', href: '/labs/optimization', icon: CpuChipIcon },
+    //   { name: '基础特性', href: '/dashboard/labs/basic', icon: CommandLineIcon },
+    //   { name: '路由系统', href: '/dashboard/labs/routing', icon: ArrowPathIcon },
+    //   { name: '数据获取', href: '/dashboard/labs/data-fetch', icon: CloudArrowDownIcon },
+    //   { name: '认证系统', href: '/dashboard/labs/auth', icon: KeyIcon },
+    //   { name: '性能优化', href: '/dashboard/labs/optimization', icon: CpuChipIcon },
     // ]
   },
 ];
@@ -39,6 +58,23 @@ const links = [
 export default function NavLinks() {
   const pathname = usePathname();
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]); // 记录展开的菜单
+
+  // 检查路径是否匹配
+  const isActive = (href: string) => {
+    // 完全匹配
+    if (pathname === href) return true;
+    
+    // 处理 labs 模块的子路径
+    if (href === '/dashboard/labs' && pathname.startsWith('/dashboard/labs/')) return true;
+    
+    // 处理 invoices 模块的子路径（新建和编辑页面）
+    if (href === '/dashboard/invoices' && (
+      pathname.startsWith('/dashboard/invoices/create') ||
+      pathname.includes('/dashboard/invoices/') && pathname.includes('/edit')
+    )) return true;
+    
+    return false;
+  };
 
   // 处理菜单展开/收起
   const toggleMenu = (menuName: string) => {
@@ -110,7 +146,7 @@ export default function NavLinks() {
             className={clsx(
               'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
-                'bg-sky-100 text-blue-600': pathname === link.href,
+                'bg-sky-100 text-blue-600': isActive(link.href),
               },
             )}
           >

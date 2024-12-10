@@ -7,6 +7,8 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "warn", // 禁止使用 any 类型
+    "react-hooks/exhaustive-deps": "warn", // 检查 Hook(如useEffect)的依赖数组 决定了 Hook 内部代码是否会在特定变量变化时重新执行。如果数组中遗漏了依赖变量，可能会导致意料之外的行为
     "jsx-a11y/alt-text": "error",
     "no-unused-vars": "off"
   }

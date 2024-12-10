@@ -16,25 +16,25 @@ const LAB_ITEMS = [
   {
     title: '基础特性',
     description: '学习 Next.js 的核心概念，包括 Server Components、Client Components 等',
-    href: '/labs/basic',
+    href: '/dashboard/labs/basic',
     icon: BeakerIcon,
   },
   {
     title: '路由系统',
     description: '探索 App Router、动态路由、路由组等路由系统特性',
-    href: '/labs/routing',
+    href: '/dashboard/labs/routing',
     icon: ArrowPathIcon,
   },
   {
     title: '认证系统',
     description: '实现用户认证、授权和中间件功能',
-    href: '/labs/auth',
+    href: '/dashboard/labs/auth',
     icon: KeyIcon,
   },
   {
     title: '性能优化',
     description: '掌握图片优化、字体优化、流式渲染等性能优化技巧',
-    href: '/labs/performance',
+    href: '/dashboard/labs/performance',
     icon: CpuChipIcon,
   },
 ];
@@ -66,4 +66,4 @@ export default function LabsPage() {
       </div>
     </div>
   );
-}
+} 
