@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { CpuChipIcon } from '@heroicons/react/24/outline';
+'use client';
 
-export const metadata: Metadata = {
-  title: '性能优化 - Next.js 实验室',
-  description: '掌握图片优化、字体优化、流式渲染等性能优化技巧',
-};
+import { useEffect } from 'react';
+import { CpuChipIcon } from '@heroicons/react/24/outline';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-tsx';
 
 const PERFORMANCE_TOPICS = [
   {
@@ -90,6 +92,10 @@ export default function Navigation() {
 ];
 
 export default function PerformancePage() {
+  useEffect(() => {
+    Prism.highlightAll();
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="flex items-center space-x-3">
@@ -105,8 +111,10 @@ export default function PerformancePage() {
           >
             <h2 className="text-xl font-semibold">{topic.title}</h2>
             <p className="text-gray-600">{topic.description}</p>
-            <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-              <code className="text-sm">{topic.code}</code>
+            <pre className="bg-[#1e1e1e] rounded-lg overflow-x-auto">
+              <code className="language-typescript">
+                {topic.code}
+              </code>
             </pre>
           </div>
         ))}

@@ -6,9 +6,11 @@ export default function LabsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col min-h-screen">
       <Breadcrumb />
-      {children}
+      <div className="content-container flex-1">
+        {children}
+      </div>
     </div>
   );
 } 

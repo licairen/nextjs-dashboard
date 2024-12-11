@@ -1,5 +1,6 @@
 import '@/app/ui/global.css'; 
 import { Inter } from 'next/font/google';
+import 'prismjs/themes/prism-tomorrow.css';
 
 // 初始化 Inter 字体
 const inter = Inter({ subsets: ['latin'] });

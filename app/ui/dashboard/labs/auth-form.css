@@ -1,0 +1,118 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  background: rgba(232, 231, 231, 0.1);
+  padding: 2.5rem 5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px 6px rgba(0, 0, 0, 0.1);
+}
+.form-password {
+  margin-top: 10rem!important;
+  margin-left: -10rem!important;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.input {
+  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.form-button-container {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background-color: #3b82f6;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-button-container:hover {
+  transform: scale(1.05);
+}
+
+.form-button {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-animation {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #1d4ed8;
+}
+
+.bg-animation:nth-child(2) {
+  rotate: 45deg;
+  left: 32%;
+  top: 32%;
+  transition: all 1s ease;
+}
+
+.bg-animation:nth-child(3) {
+  rotate: -45deg;
+  left: -32%;
+  top: -32%;
+  transition: all 1s ease;
+}
+
+.form-button-container:hover .bg-animation:nth-child(2) {
+  left: -100%;
+  top: -100%;
+}
+
+.form-button-container:hover .bg-animation:nth-child(3) {
+  left: 100%;
+  top: 100%;
+}
+
+.error-message {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ef4444;
+  font-size: 0.875rem;
+}
+
+.button-loader {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #ffffff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
