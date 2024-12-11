@@ -36,6 +36,12 @@ const LAB_ITEMS = [
     href: '/dashboard/labs/performance',
     icon: CpuChipIcon,
   },
+  {
+    title: 'Hooks',
+    description: 'React 和 Next.js 的 Hooks API 总览及使用示例',
+    href: '/dashboard/labs/hooks',
+    icon: CpuChipIcon,
+  },
 ];
 
 const PASSWORD_KEY = 'labs_auth_password';

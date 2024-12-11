@@ -4,7 +4,8 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const isLoggedIn = request.cookies.has('auth-token'); // 或者其他验证登录状态的方法
   const { pathname } = request.nextUrl;
-
+  console.log('middleware', isLoggedIn, pathname);
+  
   // 如果用户已登录且访问登录页，重定向到 dashboard
   if (isLoggedIn && pathname === '/login') {
     return NextResponse.redirect(new URL('/dashboard', request.url));

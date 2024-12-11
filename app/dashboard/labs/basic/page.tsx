@@ -283,7 +283,7 @@ export default function BasicPage() {
       {/* 主要内容区域 - 添加上边距来避免被面包屑遮挡 */}
       <div className="flex flex-1">
         {/* 左侧导航 */}
-        <nav className="w-64 p-4 border-r sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+        <nav className="w-64 p-4 border-r top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
           <div className="text-xl font-bold mb-4">概述</div>
           <div className="space-y-4">
             {BASIC_TOPICS.map((topic, index) => (
