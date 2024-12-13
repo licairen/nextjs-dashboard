@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { BeakerIcon } from '@heroicons/react/24/outline';
-import { useEffect, useState, useRef } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-tsx';
+import { BeakerIcon } from '@heroicons/react/24/outline'
+import { useEffect, useState, useRef } from 'react'
+import Prism from 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
 
 const BASIC_TOPICS = [
   {
@@ -16,43 +16,43 @@ const BASIC_TOPICS = [
       {
         title: '默认行为',
         server: '默认情况下，组件是 Server Components。',
-        client: '必须显式添加 \'use client\'; 标记才是 Client Components。'
+        client: "必须显式添加 'use client'; 标记才是 Client Components。",
       },
       {
         title: '运行环境',
         server: '运行在服务器端，代码在服务器执行。',
-        client: '运行在客户端，代码在浏览器执行。'
+        client: '运行在客户端，代码在浏览器执行。',
       },
       {
         title: '访问后端资源',
         server: '可以直接访问数据库、API 或其他服务器端资源。',
-        client: '无法直接访问服务器端资源，必须通过 API 请求。'
+        client: '无法直接访问服务器端资源，必须通过 API 请求。',
       },
       {
         title: '发送到客户端的代码',
         server: '仅发送最小的 HTML 和必要的静态数据到客户端，无多余的 JS。',
-        client: '发送整个组件的 JavaScript 代码到客户端运行。'
+        client: '发送整个组件的 JavaScript 代码到客户端运行。',
       },
       {
         title: '性能优化',
         server: '减少客户端 JavaScript 的体积，提高页面加载性能。',
-        client: '可能导致客户端加载较多的 JavaScript，影响性能。'
+        client: '可能导致客户端加载较多的 JavaScript，影响性能。',
       },
       {
         title: '交互性',
         server: '无法处理客户端交互（例如事件处理、状态管理）。',
-        client: '支持完整的客户端交互（例如按钮点击、动态渲染）。'
+        client: '支持完整的客户端交互（例如按钮点击、动态渲染）。',
       },
       {
-        title: '\'use server\'; 标记',
-        server: '默认行为，通常不需要显式声明 \'use server\';。',
-        client: '不适用（仅能用于 Server Components）。'
+        title: "'use server'; 标记",
+        server: "默认行为，通常不需要显式声明 'use server';。",
+        client: '不适用（仅能用于 Server Components）。',
       },
       {
-        title: '\'use client\'; 标记',
-        server: '无效，标记为 \'use client\'; 的组件会被视为 Client Components。',
-        client: '必须显式声明为 \'use client\'; 才是 Client Components。'
-      }
+        title: "'use client'; 标记",
+        server: "无效，标记为 'use client'; 的组件会被视为 Client Components。",
+        client: "必须显式声明为 'use client'; 才是 Client Components。",
+      },
     ],
     code: `// Server Component (默认)
     // app/server-component.tsx
@@ -70,7 +70,7 @@ const BASIC_TOPICS = [
       // 可以使用浏览器 API 和状态
       const [state, setState] = useState(null);
       return <button onClick={() => setState()}>更新状态</button>;
-    }`
+    }`,
   },
   {
     title: '水合检测 (Hydration Detection)',
@@ -79,18 +79,18 @@ const BASIC_TOPICS = [
       {
         title: '什么是水合',
         server: '服务器端生成静态 HTML',
-        client: 'React 接管 HTML，添加事件处理和状态管理'
+        client: 'React 接管 HTML，添加事件处理和状态管理',
       },
       {
         title: '为什么需要检测',
         server: '某些功能（如 Prism.js）需要在客户端完全准备好后才能初始化',
-        client: '避免服务器端和客户端渲染不匹配的问题'
+        client: '避免服务器端和客户端渲染不匹配的问题',
       },
       {
         title: '执行时机',
         server: '初始状态为 false，不执行客户端特定代码',
-        client: 'useEffect 触发后设置为 true，表示水合完成'
-      }
+        client: 'useEffect 触发后设置为 true，表示水合完成',
+      },
     ],
     code: `// 水合检测模式示例
     'use client';
@@ -120,7 +120,7 @@ const BASIC_TOPICS = [
           )}
         </div>
       );
-    }`
+    }`,
   },
   {
     title: '数据获取策略',
@@ -140,7 +140,7 @@ const BASIC_TOPICS = [
       fetch('https://api.example.com/data', { next: { revalidate: 3600 } });
 
       // 4. 动态数据获取
-      fetch('https://api.example.com/data', { cache: 'no-store' });`
+      fetch('https://api.example.com/data', { cache: 'no-store' });`,
   },
   {
     title: '路由处理器 (Route Handlers)',
@@ -156,7 +156,7 @@ const BASIC_TOPICS = [
     export async function POST(request: Request) {
       const data = await request.json();
       return NextResponse.json({ received: data });
-    }`
+    }`,
   },
   {
     title: '元数据 (Metadata)',
@@ -172,7 +172,7 @@ const BASIC_TOPICS = [
           description: '社交分享描述',
           images: ['/og-image.jpg'],
         },
-      };`
+      };`,
   },
   {
     title: '中间件 (Middleware)',
@@ -190,7 +190,7 @@ const BASIC_TOPICS = [
         }
         
         return NextResponse.next();
-      }`
+      }`,
   },
   {
     title: '错误处理',
@@ -216,7 +216,7 @@ const BASIC_TOPICS = [
       // app/not-found.tsx
       export default function NotFound() {
         return <div>404 - 页面未找到</div>;
-      }`
+      }`,
   },
   {
     title: '环境变量和配置',
@@ -236,47 +236,47 @@ const BASIC_TOPICS = [
           customKey: 'custom-value',
         },
         // 其他配置...
-      }`
-  }
-];
+      }`,
+  },
+]
 
 export default function BasicPage() {
-  const [isClient, setIsClient] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [isClient, setIsClient] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     if (isClient) {
-      Prism.highlightAll();
-      
+      Prism.highlightAll()
+
       // 设置 Intersection Observer
       observerRef.current = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              setActiveSection(entry.target.id);
+              setActiveSection(entry.target.id)
             }
-          });
+          })
         },
         {
-          rootMargin: '-20% 0px -60% 0px'
+          rootMargin: '-20% 0px -60% 0px',
         }
-      );
+      )
 
       // 观察所有章节
       document.querySelectorAll('[data-section]').forEach((section) => {
-        observerRef.current?.observe(section);
-      });
+        observerRef.current?.observe(section)
+      })
 
       return () => {
-        observerRef.current?.disconnect();
-      };
+        observerRef.current?.disconnect()
+      }
     }
-  }, [isClient]);
+  }, [isClient])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -287,8 +287,8 @@ export default function BasicPage() {
           <div className="text-xl font-bold mb-4">概述</div>
           <div className="space-y-4">
             {BASIC_TOPICS.map((topic, index) => (
-              <a 
-                key={index} 
+              <a
+                key={index}
                 href={`#${topic.title}`}
                 className={`block py-1.5 px-3 rounded-lg transition-colors ${
                   activeSection === topic.title
@@ -301,17 +301,17 @@ export default function BasicPage() {
             ))}
           </div>
         </nav>
-      
+
         {/* 主内容区域 */}
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="flex items-center space-x-3 mb-8">
             <BeakerIcon className="h-12 w-12 text-blue-500" />
             <h1 className="text-2xl font-bold">基础特性</h1>
           </div>
-        
+
           <div className="space-y-6">
             {BASIC_TOPICS.map((topic, index) => (
-              <div 
+              <div
                 key={index}
                 id={topic.title}
                 data-section
@@ -319,42 +319,51 @@ export default function BasicPage() {
               >
                 <h2 className="text-xl font-semibold">{topic.title}</h2>
                 <p className="text-gray-600">{topic.description}</p>
-                
+
                 {topic.comparison && (
                   <div className="mt-4 border rounded-lg overflow-hidden">
                     <table className="w-full">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">特性</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">Server Components</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">Client Components</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                            特性
+                          </th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                            Server Components
+                          </th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                            Client Components
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
                         {topic.comparison.map((item, i) => (
                           <tr key={i} className="hover:bg-gray-50">
-                            <td className="px-4 py-2 text-sm font-medium text-gray-900">{item.title}</td>
-                            <td className="px-4 py-2 text-sm text-gray-600">{item.server}</td>
-                            <td className="px-4 py-2 text-sm text-gray-600">{item.client}</td>
+                            <td className="px-4 py-2 text-sm font-medium text-gray-900">
+                              {item.title}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-600">
+                              {item.server}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-600">
+                              {item.client}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 )}
-                {
-                  isClient && <pre className="bg-[#1e1e1e] rounded-lg overflow-x-auto">
-                    <code className="language-typescript">
-                      {topic.code}
-                    </code>
+                {isClient && (
+                  <pre className="bg-[#1e1e1e] rounded-lg overflow-x-auto">
+                    <code className="language-typescript">{topic.code}</code>
                   </pre>
-                }
-                
+                )}
               </div>
             ))}
           </div>
         </main>
       </div>
     </div>
-  );
+  )
 }

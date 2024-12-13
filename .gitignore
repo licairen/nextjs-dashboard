@@ -38,3 +38,6 @@ coverage/
 # Next.js
 /prompts/
 .cursorrules
+
+# Add windsurf rules from gitignore so we can track it
+.windsurfrules

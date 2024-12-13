@@ -1,12 +1,14 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { CpuChipIcon } from '@heroicons/react/24/outline';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-tsx';
+import { useEffect, useState } from 'react'
+import { CpuChipIcon } from '@heroicons/react/24/outline'
+import Prism from 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
+import Link from 'next/link'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 const HOOKS_TOPICS = [
   {
@@ -16,28 +18,28 @@ const HOOKS_TOPICS = [
       {
         title: 'useState',
         usage: '状态管理，如表单输入、加载状态等',
-        example: '用于 LoginForm 中管理表单状态、Labs 页面的认证状态'
+        example: '用于 LoginForm 中管理表单状态、Labs 页面的认证状态',
       },
       {
         title: 'useEffect',
         usage: '副作用处理，如数据获取、DOM 操作',
-        example: '用于代码高亮初始化、水合检测、Intersection Observer'
+        example: '用于代码高亮初始化、水合检测、Intersection Observer',
       },
       {
         title: 'useRef',
         usage: '保存可变引用值，不触发重渲染',
-        example: '用于保存 IntersectionObserver 实例'
+        example: '用于保存 IntersectionObserver 实例',
       },
       {
         title: 'usePathname',
         usage: '获取当前路由路径',
-        example: '用于面包屑导航和导航栏高亮'
+        example: '用于面包屑导航和导航栏高亮',
       },
       {
         title: 'useRouter',
         usage: '路由操作和导航',
-        example: '用于表单新增 编辑成功后跳转和页面刷新'
-      }
+        example: '用于表单新增 编辑成功后跳转和页面刷新',
+      },
     ],
     code: `// 状态管理
 const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +55,7 @@ const router = useRouter();
 const pathname = usePathname();
 
 // DOM 引用
-const observerRef = useRef(null);`
+const observerRef = useRef(null);`,
   },
   {
     title: 'React 核心 Hooks',
@@ -62,49 +64,49 @@ const observerRef = useRef(null);`
       {
         title: 'useCallback',
         usage: '记忆化回调函数，优化性能',
-        example: '适用于传递给子组件的回调函数'
+        example: '适用于传递给子组件的回调函数',
       },
       {
         title: 'useMemo',
         usage: '记忆化计算结果，避免重复计算',
-        example: '适用于复杂数据处理或过滤'
+        example: '适用于复杂数据处理或过滤',
       },
       {
         title: 'useContext',
         usage: '跨组件共享状态',
-        example: '适用于主题、用户认证等全局状态'
+        example: '适用于主题、用户认证等全局状态',
       },
       {
         title: 'useReducer',
         usage: '复杂状态逻辑管理',
-        example: '适用于多个相关状态或复杂状态更新'
+        example: '适用于多个相关状态或复杂状态更新',
       },
       {
         title: 'useLayoutEffect',
         usage: '同步执行副作用',
-        example: '适用于需要在浏览器绘制前执行的操作'
-      }
+        example: '适用于需要在浏览器绘制前执行的操作',
+      },
     ],
     code: `// React 核心 Hooks 示例
-// useCallback 示例
-const memoizedCallback = useCallback(
-  () => {
-    doSomething(a, b);
-  },
-  [a, b],
-);
+      // useCallback 示例 如果子组件没有使用 React.memo，使用 useCallback 可能是多余的
+      const memoizedCallback = useCallback(
+        () => {
+          doSomething(a, b);
+        },
+        [a, b],
+      );
 
-// useMemo 示例
-const memoizedValue = useMemo(
-  () => computeExpensiveValue(a, b),
-  [a, b]
-);
+      // useMemo 示例
+      const memoizedValue = useMemo(
+        () => computeExpensiveValue(a, b),
+        [a, b]
+      );
 
-// useContext 示例
-const value = useContext(MyContext);
+      // useContext 示例
+      const value = useContext(MyContext);
 
-// useReducer 示例
-const [state, dispatch] = useReducer(reducer, initialState);`
+      // useReducer 示例
+      const [state, dispatch] = useReducer(reducer, initialState);`,
   },
   {
     title: 'Next.js 特有 Hooks',
@@ -113,23 +115,23 @@ const [state, dispatch] = useReducer(reducer, initialState);`
       {
         title: 'useSearchParams',
         usage: '访问当前 URL 的查询参数',
-        example: '用于获取和解析 URL 查询字符串'
+        example: '用于获取和解析 URL 查询字符串',
       },
       {
         title: 'useSelectedLayoutSegment',
         usage: '获取当前激活的路由段',
-        example: '用于构建复杂的导航菜单'
+        example: '用于构建复杂的导航菜单',
       },
       {
         title: 'useSelectedLayoutSegments',
         usage: '获取所有激活的路由段',
-        example: '用于面包屑导航'
+        example: '用于面包屑导航',
       },
       {
         title: 'useParams',
         usage: '访问动态路由参数',
-        example: '用于获取路由中的动态部分'
-      }
+        example: '用于获取路由中的动态部分',
+      },
     ],
     code: `// Next.js Hooks 示例
 // 查询参数
@@ -139,27 +141,59 @@ const query = searchParams.get('q');
 // 路由段
 const segment = useSelectedLayoutSegment();
 
-// 动态参��
+// 动态参数
 const params = useParams();
 const id = params.id;
 
 // 所有路由段
-const segments = useSelectedLayoutSegments();`
-  }
-];
+const segments = useSelectedLayoutSegments();`,
+  },
+  {
+    title: 'React.memo 基础示例',
+    description: '通过简单的 Todo List 理解 React.memo 的基本使用。',
+    link: '/dashboard/labs/hooks/memo',
+    comparison: [
+      {
+        title: 'React.memo',
+        usage: '组件记忆化，避免不必要的重渲染',
+        example: '用于优化列表项等重复渲染的组件',
+      },
+    ],
+    code: `// React.memo 基本使用示例
+const MemoizedComponent = React.memo(MyComponent);`,
+  },
+  {
+    title: 'React.memo 进阶示例',
+    description:
+      '通过复杂的任务管理系统展示 React.memo 在实际应用中的优化效果。',
+    link: '/dashboard/labs/hooks/memo/advanced',
+    comparison: [
+      {
+        title: 'React.memo + useCallback',
+        usage: '组件记忆化配合回调函数缓存',
+        example: '用于优化复杂组件树的性能',
+      },
+    ],
+    code: `// 复杂场景的优化示例
+const TaskCard = React.memo(({ task, onUpdate }) => {
+  console.log('TaskCard rendered:', task.id);
+  return <div>{/* 复杂的任务卡片UI */}</div>;
+});`,
+  },
+]
 
 export default function HooksPage() {
-  const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     if (isClient) {
-      Prism.highlightAll();
+      Prism.highlightAll()
     }
-  }, [isClient]);
+  }, [isClient])
 
   return (
     <div className="space-y-8">
@@ -167,31 +201,53 @@ export default function HooksPage() {
         <CpuChipIcon className="h-8 w-8 text-blue-500" />
         <h1 className="text-2xl font-bold">Hooks 总览</h1>
       </div>
-      
+
       <div className="space-y-6">
         {HOOKS_TOPICS.map((topic, index) => (
-          <div 
+          <div
             key={index}
             className="rounded-lg border border-gray-200 p-6 space-y-4"
           >
             <h2 className="text-xl font-semibold">{topic.title}</h2>
             <p className="text-gray-600">{topic.description}</p>
-            
+
+            {topic.link && (
+              <Link
+                href={topic.link}
+                className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              >
+                查看示例
+                <ArrowRightIcon className="ml-2 h-4 w-4" />
+              </Link>
+            )}
+
             <div className="mt-4 border rounded-lg overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">Hook</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">用途</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">示例场景</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                      Hook
+                    </th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                      用途
+                    </th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                      示例场景
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {topic.comparison.map((item, i) => (
                     <tr key={i} className="hover:bg-gray-50">
-                      <td className="px-4 py-2 text-sm font-medium text-gray-900">{item.title}</td>
-                      <td className="px-4 py-2 text-sm text-gray-600">{item.usage}</td>
-                      <td className="px-4 py-2 text-sm text-gray-600">{item.example}</td>
+                      <td className="px-4 py-2 text-sm font-medium text-gray-900">
+                        {item.title}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-600">
+                        {item.usage}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-600">
+                        {item.example}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -200,14 +256,12 @@ export default function HooksPage() {
 
             {isClient && (
               <pre className="bg-[#1e1e1e] rounded-lg overflow-x-auto">
-                <code className="language-typescript">
-                  {topic.code}
-                </code>
+                <code className="language-typescript">{topic.code}</code>
               </pre>
             )}
           </div>
         ))}
       </div>
     </div>
-  );
-} 
+  )
+}

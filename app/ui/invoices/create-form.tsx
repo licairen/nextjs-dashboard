@@ -1,38 +1,37 @@
-'use client';
-import { CustomerField } from '@/app/lib/definitions';
-import Link from 'next/link';
+'use client'
+import { CustomerField } from '@/app/lib/definitions'
+import Link from 'next/link'
 import {
   CheckIcon,
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
-} from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
-import { createInvoice, State } from '@/app/lib/actions';
-import { useState } from 'react';
+} from '@heroicons/react/24/outline'
+import { Button } from '@/app/ui/button'
+import { createInvoice, State } from '@/app/lib/actions'
+import { useState } from 'react'
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from 'next/navigation'
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const [errors, setErrors] = useState<State["errors"]>({});
-  const [message, setMessage] = useState<string>();
-  const router = useRouter();  // 添加 router
+  const [errors, setErrors] = useState<State['errors']>({})
+  const [message, setMessage] = useState<string>()
+  const router = useRouter() // 添加 router
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const result = await createInvoice({}, formData);
-    
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const result = await createInvoice({}, formData)
+
     if ('status' in result && result.status !== 200) {
-      setErrors(result.errors || {});
-      setMessage(result.message);
+      setErrors(result.errors || {})
+      setMessage(result.message)
     } else {
       // 成功，清空错误信息并显示成功信息或重定向
-      setErrors({});
-      setMessage(result.message);
+      setErrors({})
+      setMessage(result.message)
       // 如果需要跳转
-      router.push('/dashboard/invoices');
+      router.push('/dashboard/invoices')
     }
   }
 
@@ -164,5 +163,5 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
       </div>
       {message && <div className="mt-4 text-sm font-medium">{message}</div>}
     </form>
-  );
+  )
 }

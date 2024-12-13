@@ -6,24 +6,22 @@ export const authService = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials),
-    });
-    
-    
-    
+    })
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || '登录失败');
+      const error = await response.json()
+      throw new Error(error.message || '登录失败')
     }
-    
-    const data = await response.json();
-    console.log(response, 'response2222222', data);
+
+    const data = await response.json()
+    console.log(response, 'response2222222', data)
     // 确保返回正确的数据结构
     return {
-        ...data,
+      ...data,
       success: true,
-      data: data.data
-    //   data: data.user
-    };
+      data: data.data,
+      //   data: data.user
+    }
   },
 
   // 注册请求
@@ -32,13 +30,13 @@ export const authService = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
-    });
-    
+    })
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || '注册失败');
+      const error = await response.json()
+      throw new Error(error.message || '注册失败')
     }
-    
-    return response.json();
-  }
-}; 
+
+    return response.json()
+  },
+}

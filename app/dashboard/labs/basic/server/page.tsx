@@ -1,4 +1,4 @@
-import { lusitana } from '@/app/ui/fonts';
+import { lusitana } from '@/app/ui/fonts'
 
 export default function ServerDemo() {
   return (
@@ -8,5 +8,5 @@ export default function ServerDemo() {
         <p>这是一个服务器组件页面</p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { sql } from '@vercel/postgres';
-import { unstable_noStore as noStore } from 'next/cache';
+import { sql } from '@vercel/postgres'
+import { unstable_noStore as noStore } from 'next/cache'
 import {
   CustomerField,
   CustomersTableType,
@@ -7,11 +7,11 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
-} from './definitions';
-import { formatCurrency } from './utils';
+} from './definitions'
+import { formatCurrency } from './utils'
 
 export async function fetchRevenue() {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
   try {
     // Artificially delay a response for demo purposes.
@@ -20,19 +20,19 @@ export async function fetchRevenue() {
     // console.log('Fetching revenue data...');
     // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    const data = await sql<Revenue>`SELECT * FROM revenue`;
+    const data = await sql<Revenue>`SELECT * FROM revenue`
 
     // console.log('Data fetch completed after 3 seconds.');
 
-    return data.rows;
+    return data.rows
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch revenue data.')
   }
 }
 
 export async function fetchLatestInvoices() {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
   try {
     const data = await sql<LatestInvoiceRaw>`
@@ -40,21 +40,21 @@ export async function fetchLatestInvoices() {
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
       ORDER BY invoices.date DESC
-      LIMIT 5`;
+      LIMIT 5`
 
     const latestInvoices = data.rows.map((invoice) => ({
       ...invoice,
       amount: formatCurrency(invoice.amount),
-    }));
-    return latestInvoices;
+    }))
+    return latestInvoices
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch the latest invoices.')
   }
 }
 
 export async function fetchCardData() {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
   try {
     // 首先检查表是否存在
@@ -63,8 +63,8 @@ export async function fetchCardData() {
         SELECT FROM information_schema.tables 
         WHERE table_name = 'customers'
       );
-    `;
-    
+    `
+
     if (!tableCheck.rows[0].exists) {
       return {
         error: '数据库表未初始化，请先创建必要的数据表',
@@ -72,7 +72,7 @@ export async function fetchCardData() {
         numberOfInvoices: 0,
         totalPaidInvoices: 0,
         totalPendingInvoices: 0,
-      };
+      }
     }
 
     // 使用 Promise.all 同时执行多个查询
@@ -82,33 +82,32 @@ export async function fetchCardData() {
       sql`SELECT 
           SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) as paid,
           SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) as pending
-        FROM invoices`
-    ]);
+        FROM invoices`,
+    ])
 
     // 添加日志来调试
     // console.log('Query results:', data);
-    
+
     return {
       numberOfCustomers: data[0].rows[0].count ?? 0,
       numberOfInvoices: data[1].rows[0].count ?? 0,
       totalPaidInvoices: data[2].rows[0].paid ?? 0,
       totalPendingInvoices: data[2].rows[0].pending ?? 0,
-    };
-
+    }
   } catch (error) {
-    console.error('数据库查询错误:', error);
-    throw new Error('获取数据失败，请检查数据库连接和表结构');
+    console.error('数据库查询错误:', error)
+    throw new Error('获取数据失败，请检查数据库连接和表结构')
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 6
 export async function fetchFilteredInvoices(
   query: string,
-  currentPage: number,
+  currentPage: number
 ) {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
   try {
     const invoices = await sql<InvoicesTable>`
@@ -130,17 +129,17 @@ export async function fetchFilteredInvoices(
         invoices.status ILIKE ${`%${query}%`}
       ORDER BY invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
+    `
 
-    return invoices.rows;
+    return invoices.rows
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch invoices.')
   }
 }
 
 export async function fetchInvoicesPages(query: string) {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
   try {
     const count = await sql`SELECT COUNT(*)
@@ -152,18 +151,18 @@ export async function fetchInvoicesPages(query: string) {
       invoices.amount::text ILIKE ${`%${query}%`} OR
       invoices.date::text ILIKE ${`%${query}%`} OR
       invoices.status ILIKE ${`%${query}%`}
-  `;
+  `
 
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE)
+    return totalPages
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of invoices.');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch total number of invoices.')
   }
 }
 
 export async function fetchInvoiceById(id: string) {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
   try {
     const data = await sql<InvoiceForm>`
@@ -174,24 +173,24 @@ export async function fetchInvoiceById(id: string) {
         invoices.status
       FROM invoices
       WHERE invoices.id = ${id};
-    `;
+    `
 
     const invoice = data.rows.map((invoice) => ({
       ...invoice,
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
-    }));
+    }))
 
-    console.log('Invoice is an empty array []---', invoice); // Invoice is an empty array []
-    return invoice[0];
+    console.log('Invoice is an empty array []---', invoice) // Invoice is an empty array []
+    return invoice[0]
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoice.');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch invoice.')
   }
 }
 
 export async function fetchCustomers() {
-  noStore(); // 添加这行来禁用缓存，确保每次都是新数据
+  noStore() // 添加这行来禁用缓存，确保每次都是新数据
 
   try {
     const data = await sql<CustomerField>`
@@ -200,21 +199,21 @@ export async function fetchCustomers() {
         name
       FROM customers
       ORDER BY name ASC
-    `;
+    `
 
-    const customers = data.rows;
-    return customers;
+    const customers = data.rows
+    return customers
   } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+    console.error('Database Error:', err)
+    throw new Error('Failed to fetch all customers.')
   }
 }
 
 export async function fetchFilteredCustomers(
   query: string,
-  currentPage: number,
+  currentPage: number
 ) {
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
   try {
     const customers = await sql<CustomersTableType>`
@@ -234,12 +233,12 @@ export async function fetchFilteredCustomers(
       GROUP BY c.id
       ORDER BY c.created_at DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
+    `
 
-    return customers.rows;
+    return customers.rows
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch customers');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch customers')
   }
 }
 
@@ -251,12 +250,12 @@ export async function fetchCustomersPages(query: string) {
       WHERE
         name ILIKE ${`%${query}%`} OR
         email ILIKE ${`%${query}%`}
-    `;
+    `
 
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE)
+    return totalPages
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of customers');
+    console.error('Database Error:', error)
+    throw new Error('Failed to fetch total number of customers')
   }
 }

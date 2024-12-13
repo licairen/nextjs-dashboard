@@ -1,10 +1,10 @@
-import { Metadata } from 'next';
-import { KeyIcon } from '@heroicons/react/24/outline';
+import { Metadata } from 'next'
+import { KeyIcon } from '@heroicons/react/24/outline'
 
 export const metadata: Metadata = {
   title: '认证系统 - Next.js 实验室',
   description: '实现用户认证、授权和中间件功能',
-};
+}
 
 const AUTH_TOPICS = [
   {
@@ -24,11 +24,12 @@ export default NextAuth({
       clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
-});`
+});`,
   },
   {
     title: '中间件保护',
-    description: '使用 Next.js 中间件保护路由，确保只有授权用户可以访问特定页面。',
+    description:
+      '使用 Next.js 中间件保护路由，确保只有授权用户可以访问特定页面。',
     code: `// middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -41,7 +42,7 @@ export function middleware(request: NextRequest) {
   }
   
   return NextResponse.next();
-}`
+}`,
   },
   {
     title: '会话管理',
@@ -61,9 +62,9 @@ import { useSession } from 'next-auth/react';
 export default function ClientComponent() {
   const { data: session } = useSession();
   return session ? <p>已登录</p> : <p>未登录</p>;
-}`
-  }
-];
+}`,
+  },
+]
 
 export default function AuthPage() {
   return (
@@ -72,10 +73,10 @@ export default function AuthPage() {
         <KeyIcon className="h-8 w-8 text-blue-500" />
         <h1 className="text-2xl font-bold">认证系统</h1>
       </div>
-      
+
       <div className="space-y-6">
         {AUTH_TOPICS.map((topic, index) => (
-          <div 
+          <div
             key={index}
             className="rounded-lg border border-gray-200 p-6 space-y-4"
           >
@@ -88,5 +89,5 @@ export default function AuthPage() {
         ))}
       </div>
     </div>
-  );
+  )
 }
