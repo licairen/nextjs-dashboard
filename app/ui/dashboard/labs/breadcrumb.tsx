@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 export default function Breadcrumb() {
-  const pathname = usePathname();
-  const paths = pathname.split('/').filter(Boolean);
-  
+  const pathname = usePathname()
+  const paths = pathname.split('/').filter(Boolean)
+
   const pathNames: { [key: string]: string } = {
-    'dashboard': '控制台',
-    'labs': '实验室',
-    'basic': '基础特性',
-    'server': '服务器组件',
-    'client': '客户端组件',
-    'data': '数据获取',
-    'routing': '路由系统',
-    'auth': '认证系统',
-    'performance': '性能优化'
-  };
+    dashboard: '控制台',
+    labs: '实验室',
+    basic: '基础特性',
+    server: '服务器组件',
+    client: '客户端组件',
+    data: '数据获取',
+    routing: '路由系统',
+    auth: '认证系统',
+    performance: '性能优化',
+  }
 
   return (
     <nav className="flex items-center space-x-2 text-gray-500 mb-6">
@@ -34,5 +34,5 @@ export default function Breadcrumb() {
         </div>
       ))}
     </nav>
-  );
-} 
+  )
+}

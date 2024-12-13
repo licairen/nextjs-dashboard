@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import NavLinks from '@/app/ui/dashboard/nav-links';
-import AcmeLogo from '@/app/ui/acme-logo';
-import { PowerIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link'
+import NavLinks from '@/app/ui/dashboard/nav-links'
+import AcmeLogo from '@/app/ui/acme-logo'
+import { PowerIcon } from '@heroicons/react/24/outline'
 
 export default function SideNav() {
   const handleSignOut = async () => {
     try {
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
-      });
-      
+      })
+
       if (response.ok) {
-        window.location.href = '/login';
+        window.location.href = '/login'
       }
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error('Logout failed:', error)
     }
-  };
+  }
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
@@ -42,5 +42,5 @@ export default function SideNav() {
         </button>
       </div>
     </div>
-  );
+  )
 }

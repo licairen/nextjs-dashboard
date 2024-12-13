@@ -1,17 +1,18 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { CpuChipIcon } from '@heroicons/react/24/outline';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-tsx';
+import { useEffect } from 'react'
+import { CpuChipIcon } from '@heroicons/react/24/outline'
+import Prism from 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
 
 const PERFORMANCE_TOPICS = [
   {
     title: '图片优化',
-    description: 'Next.js 内置的 Image 组件自动进行图片优化，包括调整大小、格式转换和延迟加载。',
+    description:
+      'Next.js 内置的 Image 组件自动进行图片优化，包括调整大小、格式转换和延迟加载。',
     code: `import Image from 'next/image';
 
 export default function OptimizedImage() {
@@ -25,11 +26,12 @@ export default function OptimizedImage() {
       priority={true}
     />
   );
-}`
+}`,
   },
   {
     title: '字体优化',
-    description: '使用 next/font 自动优化和加载自定义字体，包括自托管 Google Fonts。',
+    description:
+      '使用 next/font 自动优化和加载自定义字体，包括自托管 Google Fonts。',
     code: `import { Inter } from 'next/font/google';
 
 const inter = Inter({
@@ -43,7 +45,7 @@ export default function Layout({ children }) {
       <body>{children}</body>
     </html>
   );
-}`
+}`,
   },
   {
     title: '流式渲染',
@@ -62,7 +64,7 @@ export default function Page() {
       <SlowComponent />
     </Suspense>
   );
-}`
+}`,
   },
   {
     title: '路由预取',
@@ -87,14 +89,14 @@ export default function Navigation() {
       </button>
     </>
   );
-}`
-  }
-];
+}`,
+  },
+]
 
 export default function PerformancePage() {
   useEffect(() => {
-    Prism.highlightAll();
-  }, []);
+    Prism.highlightAll()
+  }, [])
 
   return (
     <div className="space-y-8">
@@ -102,23 +104,21 @@ export default function PerformancePage() {
         <CpuChipIcon className="h-8 w-8 text-blue-500" />
         <h1 className="text-2xl font-bold">性能优化</h1>
       </div>
-      
+
       <div className="space-y-6">
         {PERFORMANCE_TOPICS.map((topic, index) => (
-          <div 
+          <div
             key={index}
             className="rounded-lg border border-gray-200 p-6 space-y-4"
           >
             <h2 className="text-xl font-semibold">{topic.title}</h2>
             <p className="text-gray-600">{topic.description}</p>
             <pre className="bg-[#1e1e1e] rounded-lg overflow-x-auto">
-              <code className="language-typescript">
-                {topic.code}
-              </code>
+              <code className="language-typescript">{topic.code}</code>
             </pre>
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }

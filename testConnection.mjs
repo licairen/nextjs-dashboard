@@ -1,5 +1,5 @@
-import pkg from 'pg';
-const { Client } = pkg;
+import pkg from 'pg'
+const { Client } = pkg
 
 async function testConnection() {
   const client = new Client({
@@ -7,16 +7,16 @@ async function testConnection() {
     ssl: {
       rejectUnauthorized: false, // 仅用于测试，确保生产环境中正确配置
     },
-  });
+  })
 
   try {
-    await client.connect();
-    console.log('Connected to database successfully');
+    await client.connect()
+    console.log('Connected to database successfully')
   } catch (error) {
-    console.error('Database connection error:', error);
+    console.error('Database connection error:', error)
   } finally {
-    await client.end();
+    await client.end()
   }
 }
 
-testConnection();
+testConnection()

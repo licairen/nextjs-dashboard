@@ -1,71 +1,69 @@
-'use client';
+'use client'
 
-import { lusitana } from '@/app/ui/fonts';
+import { lusitana } from '@/app/ui/fonts'
 import {
   AtSymbolIcon,
   KeyIcon,
-  ExclamationCircleIcon
-} from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { Button } from '@/app/ui/button';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { authService } from '@/app/lib/api-service';
+  ExclamationCircleIcon,
+} from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@heroicons/react/20/solid'
+import { Button } from '@/app/ui/button'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { authService } from '@/app/lib/api-service'
 
 export default function LoginForm() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
     try {
-      const response = await authService.login({ email, password });
-      console.log(response, 'response');
-      
+      const response = await authService.login({ email, password })
+      console.log(response, 'response')
+
       if (response.success && response.code === 200) {
-        router.push('/dashboard');
-        router.refresh();
+        router.push('/dashboard')
+        router.refresh()
       } else {
-        setError('登录失败，请重试');
+        setError('登录失败，请重试')
       }
     } catch (err) {
       if (err instanceof Error) {
         if (err.message === '用户不存在') {
-          setError(err.message);
+          setError(err.message)
         } else if (err.message === '密码错误') {
-          setPassword('');
-          setError(err.message);
+          setPassword('')
+          setError(err.message)
         } else {
-          setError('系统错误，请稍后重试');
+          setError('系统错误，请稍后重试')
         }
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setError('');
-  };
+    setEmail(e.target.value)
+    setError('')
+  }
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    setError('');
-  };
+    setPassword(e.target.value)
+    setError('')
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className={`${lusitana.className} mb-3 text-2xl`}>
-          请登录继续
-        </h1>
+        <h1 className={`${lusitana.className} mb-3 text-2xl`}>请登录继续</h1>
         <div className="w-full">
           <div>
             <label
@@ -113,11 +111,7 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <Button 
-          className="mt-4 w-full"
-          type="submit"
-          disabled={isLoading}
-        >
+        <Button className="mt-4 w-full" type="submit" disabled={isLoading}>
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
@@ -141,12 +135,12 @@ export default function LoginForm() {
         </div>
 
         <p className="mt-4 text-center text-sm text-gray-500">
-          还没有账号？ 
+          还没有账号？
           <button
             type="button"
             className="text-blue-500 hover:text-blue-600"
             onClick={() => {
-              router.push('/register');
+              router.push('/register')
             }}
           >
             立即注册
@@ -154,5 +148,5 @@ export default function LoginForm() {
         </p>
       </div>
     </form>
-  );
+  )
 }

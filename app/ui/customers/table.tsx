@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { formatDateToLocal } from '@/app/lib/utils';
-import { CustomersTableType } from '@/app/lib/definitions';
-import Image from 'next/image';
+import { formatDateToLocal } from '@/app/lib/utils'
+import { CustomersTableType } from '@/app/lib/definitions'
+import Image from 'next/image'
 
 export default function CustomersTable({
   customers,
 }: {
-  customers: CustomersTableType[];
+  customers: CustomersTableType[]
 }) {
   return (
     <div className="mt-6 flow-root">
@@ -111,5 +111,5 @@ export default function CustomersTable({
         </div>
       </div>
     </div>
-  );
+  )
 }
