@@ -5,6 +5,7 @@
 2. 新建数据库表的操作流程
 3. 常见问题与解决方案
 
+
 #### 前提:配置数据库连接
 ```bash
 DATABASE_URL="postgresql://用户名:密码@localhost:5432/数据库名?schema=public"
@@ -158,3 +159,5 @@ npx prisma studio
 * 在生产环境部署前，请使用 `prisma migrate deploy` 命令
 * 定期备份数据库
 * 在开发环境中使用 `prisma migrate reset` 要谨慎，它会清除所有数据
+
+[避坑指南](https://www.cnblogs.com/zcookies/p/17517270.html)

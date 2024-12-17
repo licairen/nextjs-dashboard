@@ -7,6 +7,7 @@ specifiers:
   '@shadcn/ui': ^0.0.4
   '@tailwindcss/forms': ^0.5.9
   '@types/bcrypt': ^5.0.2
+  '@types/crypto-js': ^4.2.2
   '@types/node': 20.10.0
   '@types/prismjs': ^1.26.5
   '@types/react': 18.2.0
@@ -19,6 +20,7 @@ specifiers:
   bcrypt: ^5.1.1
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
+  crypto-js: ^4.2.0
   eslint: ^8.56.0
   eslint-config-next: 14.0.4
   jose: ^5.9.6
@@ -45,6 +47,7 @@ dependencies:
   '@radix-ui/react-slot': 1.1.0_3mjolpizrsjgnt7s4ahgoveqvu
   '@shadcn/ui': 0.0.4
   '@tailwindcss/forms': 0.5.9_tailwindcss@3.4.15
+  '@types/crypto-js': 4.2.2
   '@types/prismjs': 1.26.5
   '@upstash/redis': 1.34.3
   '@vercel/postgres': 0.10.0
@@ -52,6 +55,7 @@ dependencies:
   bcrypt: 5.1.1
   class-variance-authority: 0.7.1
   clsx: 2.1.1
+  crypto-js: 4.2.0
   jose: 5.9.6
   lucide-react: 0.468.0_react@18.2.0
   next: 15.0.4-canary.47_biqbaboplfbrettd7655fr4n2y
@@ -679,6 +683,10 @@ packages:
     dependencies:
       '@types/node': 20.10.0
     dev: true
+
+  /@types/crypto-js/4.2.2:
+    resolution: {integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==}
+    dev: false
 
   /@types/json-schema/7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}

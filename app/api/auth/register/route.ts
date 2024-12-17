@@ -1,6 +1,5 @@
-import { sql } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
-import bcrypt from 'bcrypt'
+import { AuthService } from '@/lib/services/auth'
 
 export async function POST(request: Request) {
   try {
@@ -14,36 +13,27 @@ export async function POST(request: Request) {
       )
     }
 
-    // 验证邮箱格式
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    try {
+      // 直接使用原始密码，让 UserService 处理哈希
+      const result = await AuthService.register({
+        email,
+        password,
+        name,
+      })
+
+      return NextResponse.json(result, { status: result.code })
+    } catch (error) {
+      console.error('注册错误:', error)
       return NextResponse.json(
-        { message: '请输入有效的邮箱地址' },
-        { status: 400 }
+        { success: false, message: '注册过程中发生错误', code: 500 },
+        { status: 500 }
       )
     }
-
-    // 检查邮箱是否已存在
-    const existingUser = await sql`
-      SELECT * FROM users WHERE email = ${email}
-    `
-
-    if (existingUser.rows.length > 0) {
-      return NextResponse.json({ message: '该邮箱已被注册' }, { status: 400 })
-    }
-
-    // 密码加密
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    // 创建新用户
-    await sql`
-      INSERT INTO users (name, email, password)
-      VALUES (${name}, ${email}, ${hashedPassword})
-    `
-
-    return NextResponse.json({ message: '注册成功' }, { status: 201 })
   } catch (error) {
     console.error('注册错误:', error)
-    return NextResponse.json({ message: '注册过程中发生错误' }, { status: 500 })
+    return NextResponse.json(
+      { success: false, message: '注册过程中发生错误', code: 500 },
+      { status: 500 }
+    )
   }
 }

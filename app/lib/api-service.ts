@@ -4,39 +4,52 @@ export const authService = {
   async login(credentials: { email: string; password: string }) {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(credentials),
     })
 
+    const data = await response.json()
+
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || '登录失败')
+      throw new Error(data.message || '登录失败')
     }
 
-    const data = await response.json()
-    console.log(response, 'response2222222', data)
-    // 确保返回正确的数据结构
-    return {
-      ...data,
-      success: true,
-      data: data.data,
-      //   data: data.user
-    }
+    return data
   },
 
   // 注册请求
   async register(userData: { email: string; password: string; name: string }) {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(userData),
     })
 
+    const data = await response.json()
+
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || '注册失败')
+      throw new Error(data.message || '注册失败')
     }
 
-    return response.json()
+    return data
+  },
+
+  // 登出请求
+  async logout() {
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.message || '登出失败')
+    }
+
+    return data
   },
 }
