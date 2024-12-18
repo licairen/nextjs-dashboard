@@ -24,27 +24,33 @@ export default function LoginForm() {
     setIsLoading(true)
     setError('')
 
-    try {
-      const response = await authService.login({ email, password })
-      console.log(response, 'response')
+    if (!email || !password) {
+      setError('请填写所有必填字段')
+      setIsLoading(false)
+      return
+    }
 
-      if (response.success && response.code === 200) {
-        router.push('/dashboard')
+    try {
+      // 直接使用原始密码
+      const { data, code, success, message} = await authService.login({
+        email,
+        password,
+      })
+
+      console.log('登录响应:', data, code, success)
+
+      if (success && code === 200) {
+        console.log('准备跳转到 dashboard')
+        // 使用 replace 而不是 push，防止用户返回到登录页
+        router.replace('/dashboard')
+        console.log('跳转完成')
         router.refresh()
       } else {
-        setError('登录失败，请重试')
+        setError(message || '登录失败，请重试')
       }
-    } catch (err) {
-      if (err instanceof Error) {
-        if (err.message === '用户不存在') {
-          setError(err.message)
-        } else if (err.message === '密码错误') {
-          setPassword('')
-          setError(err.message)
-        } else {
-          setError('系统错误，请稍后重试')
-        }
-      }
+    } catch (err: any) {
+      console.error('登录错误:', err)
+      setError(err.message || '系统错误，请稍后重试')
     } finally {
       setIsLoading(false)
     }
