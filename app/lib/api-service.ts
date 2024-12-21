@@ -1,55 +1,71 @@
-// API 服务层，统一处理前端 API 请求
+import { RequestData, request } from '@/lib/utils/request';
+
+interface LoginResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data?: {
+    id: string;
+    email: string;
+    name: string;
+    token: string;
+  };
+}
+
+interface LoginParams extends RequestData {
+  email: string;
+  password: string;
+}
+
+interface RegisterParams extends RequestData {
+  email: string;
+  password: string;
+  name: string;
+}
+
+interface RegisterResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data?: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
+interface LogoutResponse {
+  success: boolean;
+  code: number;
+  message: string;
+}
+
 export const authService = {
   // 登录请求
-  async login(credentials: { email: string; password: string }) {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.message || '登录失败')
+  login: async (params: LoginParams) => {
+    const response = await request.post<LoginResponse>('/auth/login', params);
+    if (!response.success) {
+      throw new Error(response.message || '登录失败');
     }
-
-    return data
+    return response;
   },
 
   // 注册请求
-  async register(userData: { email: string; password: string; name: string }) {
-    const response = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.message || '注册失败')
+  register: async (params: RegisterParams) => {
+    const response = await request.post<RegisterResponse>('/auth/register', params);
+    if (!response.success) {
+      throw new Error(response.message || '注册失败');
     }
-
-    return data
+    return response;
   },
 
   // 登出请求
-  async logout() {
-    const response = await fetch('/api/auth/logout', {
-      method: 'POST',
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.message || '登出失败')
+  logout: async () => {
+    const response = await request.post<LogoutResponse>('/auth/logout');
+    if (!response.success) {
+      throw new Error(response.message || '登出失败');
     }
-
-    return data
+    window.location.href = '/login';
+    return response;
   },
-}
+};

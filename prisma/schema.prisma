@@ -40,5 +40,5 @@ model users {
   id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String @db.VarChar(255)
   email    String @unique
-  password String
+  password String @db.VarChar(255)
 }

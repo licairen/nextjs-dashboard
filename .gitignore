@@ -41,3 +41,6 @@ coverage/
 
 # Add windsurf rules from gitignore so we can track it
 .windsurfrules
+
+# ESLint
+.eslintcache

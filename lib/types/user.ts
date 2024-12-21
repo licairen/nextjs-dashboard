@@ -1,22 +1,30 @@
 export interface User {
-  id: string
-  name: string
-  email: string
-  password: string
+  id: string;
+  email: string;
+  password: string;
+  name: string;
 }
 
-export type UserWithoutPassword = Omit<User, 'password'>
+export interface UserWithoutPassword {
+  id: string;
+  email: string;
+  name: string;
+}
+
+export interface UserWithToken extends UserWithoutPassword {
+  token?: string;
+}
 
 export interface CreateUserInput {
-  name: string
-  email: string
-  password: string
+  email: string;
+  password: string;
+  name: string;
 }
 
 export interface UpdateUserInput {
-  name?: string
-  email?: string
-  password?: string
+  email?: string;
+  password?: string;
+  name?: string;
 }
 
 export interface UserLoginInput {

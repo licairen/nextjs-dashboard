@@ -1,4 +1,6 @@
-const { execSync } = require('child_process');
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+import { execSync } from 'child_process';
 
 console.log('🚀 Running custom postinstall script...');
 
