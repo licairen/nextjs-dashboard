@@ -17,11 +17,11 @@ const TodoItem = ({
   todo: Todo
   onToggle: (id: number) => void
 }) => {
-  console.log(
-    `%c[未优化组件] ${todo.text}`,
-    'color: #ff6b6b; font-weight: bold;',
-    '重新渲染了 ❌'
-  )
+  // console.log(
+  //   `%c[未优化组件] ${todo.text}`,
+  //   'color: #ff6b6b; font-weight: bold;',
+  //   '重新渲染了 ❌'
+  // )
 
   return (
     <div className="flex items-center space-x-2 p-2 border rounded">
@@ -41,11 +41,11 @@ const TodoItem = ({
 // 使用 React.memo 优化的 TodoItem 组件
 const MemoizedTodoItem = React.memo(
   ({ todo, onToggle }: { todo: Todo; onToggle: (id: number) => void }) => {
-    console.log(
-      `%c[Memo优化组件] ${todo.text}`,
-      'color: #40c057; font-weight: bold;',
-      '由于使用了 memo，避免了不必要的渲染 ✅'
-    )
+    // console.log(
+    //   `%c[Memo优化组件] ${todo.text}`,
+    //   'color: #40c057; font-weight: bold;',
+    //   '由于使用了 memo，避免了不必要的渲染 ✅'
+    // )
 
     return (
       <div className="flex items-center space-x-2 p-2 border rounded">
@@ -107,17 +107,17 @@ const TaskCard = ({
   onAssigneeChange: (id: number, userId: number | null) => void
   users: User[]
 }) => {
-  console.log(
-    `%c[未优化任务卡片] ${task.title}`,
-    'color: #ff6b6b; font-weight: bold;',
-    {
-      '重新渲染 ❌': {
-        状态: task.status,
-        负责人: task.assignee?.name || '未分配',
-        优先级: task.priority,
-      },
-    }
-  )
+  // console.log(
+  //   `%c[未优化任务卡片] ${task.title}`,
+  //   'color: #ff6b6b; font-weight: bold;',
+  //   {
+  //     '重新渲染 ❌': {
+  //       状态: task.status,
+  //       负责人: task.assignee?.name || '未分配',
+  //       优先级: task.priority,
+  //     },
+  //   }
+  // )
 
   return (
     <div className="p-4 border rounded-lg space-y-3">
@@ -171,17 +171,17 @@ const MemoizedTaskCard = React.memo(
     onAssigneeChange: (id: number, userId: number | null) => void
     users: User[]
   }) => {
-    console.log(
-      `%c[Memo优化任务卡片] ${task.title}`,
-      'color: #40c057; font-weight: bold;',
-      {
-        '避免重渲染 ✅': {
-          状态: task.status,
-          负责人: task.assignee?.name || '未分配',
-          优先级: task.priority,
-        },
-      }
-    )
+    // console.log(
+    //   `%c[Memo优化任务卡片] ${task.title}`,
+    //   'color: #40c057; font-weight: bold;',
+    //   {
+    //     '避免重渲染 ✅': {
+    //       状态: task.status,
+    //       负责人: task.assignee?.name || '未分配',
+    //       优先级: task.priority,
+    //     },
+    //   }
+    // )
 
     return (
       <div className="p-4 border rounded-lg space-y-3">

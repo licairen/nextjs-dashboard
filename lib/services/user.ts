@@ -1,4 +1,4 @@
-import { prisma } from '../prisma'
+import { prisma } from '@/lib/prisma'
 import { CreateUserInput, UpdateUserInput, User, UserWithoutPassword } from '../types/user'
 import bcrypt from 'bcrypt'
 import { Prisma } from '@prisma/client'
@@ -7,27 +7,70 @@ export class UserService {
   /**
    * 创建新用户
    */
-  static async createUser(data: CreateUserInput): Promise<UserWithoutPassword> {
+  static async createUser(data: CreateUserInput): Promise<{ success: boolean; message: string; code: number; user?: UserWithoutPassword }> {
     try {
-      const hashedPassword = await bcrypt.hash(data.password, 10)
+      console.log('开始创建用户:', { email: data.email, name: data.name });
+      
+      // 先检查用户是否已存在
+      const existingUser = await prisma.users.findUnique({
+        where: { email: data.email }
+      });
 
+      if (existingUser) {
+        console.log('用户已存在:', data.email);
+        return {
+          success: false,
+          message: '该邮箱已被注册',
+          code: 400
+        };
+      }
+
+      // 加密密码
+      console.log('开始加密密码');
+      const hashedPassword = await bcrypt.hash(data.password, 10)
+      
+      // 创建用户
+      console.log('开始创建用户记录');
       const user = await prisma.users.create({
         data: {
-          ...data,
+          email: data.email,
+          name: data.name,
           password: hashedPassword,
         },
       })
 
+      console.log('用户创建成功:', { id: user.id, email: user.email });
+
       const { password: _, ...userWithoutPassword } = user
-      return userWithoutPassword
+      return {
+        success: true,
+        message: '注册成功',
+        code: 201,
+        user: userWithoutPassword as UserWithoutPassword
+      }
     } catch (error) {
+      // 详细记录错误信息
+      console.error('创建用户错误:', error);
+      
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        // P2002 是唯一约束违反的错误代码
+        console.error('Prisma错误代码:', error.code);
+        console.error('Prisma错误详情:', error.message);
+        
         if (error.code === 'P2002') {
-          throw new Error('该邮箱已被注册')
+          return {
+            success: false,
+            message: '该邮箱已被注册',
+            code: 400
+          }
         }
       }
-      throw error
+      
+      // 返回具体的错误信息
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : '注册失败，请稍后重试',
+        code: 500
+      }
     }
   }
 
@@ -35,9 +78,14 @@ export class UserService {
    * 通过邮箱查找用户
    */
   static async findByEmail(email: string): Promise<User | null> {
-    return prisma.users.findUnique({
-      where: { email },
-    })
+    try {
+      return await prisma.users.findUnique({
+        where: { email }
+      })
+    } catch (error) {
+      console.error('查找用户错误:', error)
+      throw error
+    }
   }
 
   /**
@@ -59,7 +107,7 @@ export class UserService {
       })
 
       const { password: _, ...userWithoutPassword } = user
-      return userWithoutPassword
+      return userWithoutPassword as UserWithoutPassword
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
@@ -92,15 +140,20 @@ export class UserService {
    * 验证用户凭据
    */
   static async verifyCredentials(email: string, password: string): Promise<any> {
-    const user = await this.findByEmail(email);
-    if (!user) return null;
+    try {
+      const user = await this.findByEmail(email)
+      if (!user) return null
 
-    console.log('输入的密码:', password);
-    console.log('存储的哈希密码:', user.password);
-    
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log('密码验证结果:', isPasswordValid);
-    
-    return isPasswordValid ? user : null;
+      console.log('输入的密码:', password)
+      console.log('数据库中的密码哈希:', user.password)
+      
+      const isValid = await bcrypt.compare(password, user.password)
+      console.log('密码验证结果:', isValid)
+      
+      return isValid ? user : null
+    } catch (error) {
+      console.error('验证用户凭证错误:', error)
+      throw error
+    }
   }
 }
