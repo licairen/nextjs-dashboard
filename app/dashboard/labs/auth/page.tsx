@@ -78,7 +78,7 @@ export function LoginForm() {
   )
 }
 
-// lib/services/auth.ts
+// @/app/lib/services/auth.ts
 export class AuthService {
   static async verifyCredentials(email: string, password: string) {
     const user = await UserService.findByEmail(email)
