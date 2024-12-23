@@ -1,6 +1,6 @@
 import { UserService } from './user'
-import { AuthResponse } from '../types/auth'
-import { CreateUserInput } from '../types/user'
+import { AuthResponse } from '@/app/lib/types/auth'
+import { CreateUserInput } from '@/app/lib/types/user'
 import * as jose from 'jose'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { AuthService } from '@/lib/services/auth'
-import { UserWithToken } from '@/lib/types/user'
+import { AuthService } from '@/app/lib/services/auth'
+import { UserWithToken } from '@/app/lib/types/user'
 
 export async function POST(request: Request) {
   try {
