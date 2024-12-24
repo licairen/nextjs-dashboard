@@ -53,11 +53,26 @@ export default function LabsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
+
+  const [count, setCount] = useState(0)
+  
+  const handleClick = () => {
+    setCount(count + 1)
+    console.log('handleClick---', count)    // 还是旧值
+    
+    // 如果需要立即使用新值
+    setCount(prev => {
+      console.log('handleClick---2222', prev)   // 能获取到最新值
+      return prev + 1
+    })
+  }
+
   useEffect(() => {
     const storedPassword = localStorage.getItem(PASSWORD_KEY)
     if (storedPassword === '111') {
       setIsAuthenticated(true)
     }
+    handleClick()
   }, [])
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
