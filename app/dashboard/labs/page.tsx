@@ -7,7 +7,7 @@ import {
   ArrowPathIcon,
   KeyIcon,
   CpuChipIcon,
-  ExclamationCircleIcon,
+  ExclamationCircleIcon
 } from '@heroicons/react/24/outline'
 import '@/app/ui/dashboard/labs/auth-form.css'
 
@@ -42,7 +42,7 @@ const LAB_ITEMS = [
     description: 'React 和 Next.js 的 Hooks API 总览及使用示例',
     href: '/dashboard/labs/hooks',
     icon: CpuChipIcon,
-  },
+  }
 ]
 
 const PASSWORD_KEY = 'labs_auth_password'
