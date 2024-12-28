@@ -13,7 +13,7 @@ const AUTH_TOPICS = [
   {
     title: '认证流程概述',
     description: '完整的用户认证和授权流程，包括登录、JWT 令牌验证和会话管理。',
-    code: `// 认证流程示意图
+    code: `// 认证流程示意图 
 1. 用户登录流程
    Client (login-form.tsx)                Server
    ├─ 提交登录表单 ────────────────────> API (login/route.ts)
